@@ -10,7 +10,7 @@ using System.Xml.Linq;
 namespace Cards
 {
     /// <summary>
-    /// Converts to XElemnt and outputs into text file information regarding user interaction event
+    /// Outputs the information regarding user interaction event into a text file 
     /// </summary>
     class EventFileWriter
     {
@@ -32,12 +32,7 @@ namespace Cards
                 }
            
         }
-        /// <summary>
-        /// conberts event's information into XElemet type and outputs it as a string
-        /// </summary>
-        /// <param name="userEvent"> an event, which is being reported</param>
-        /// <returns></returns>
-        
+      
     }
 
 

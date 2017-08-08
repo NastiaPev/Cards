@@ -15,6 +15,12 @@ namespace Cards
     {
         public DateTime CurrentDateTime { get; }
         public string SenderName { get; }
+
+        /// <summary>
+        /// Overrides standard serialization method.
+        /// Converts event's information into XElemet type adding Button name, DateTime of the button press and number in the box
+        /// </summary>
+        /// <returns>XElement containing Button name, DateTime of the button press and number in the box associated with it</returns>
         public override XElement Serialize()
         {
             XElement output = base.Serialize();

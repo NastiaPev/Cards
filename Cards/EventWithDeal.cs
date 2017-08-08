@@ -40,6 +40,11 @@ namespace Cards
             HandWest = handWest;
         }
 
+        /// <summary>
+        /// Overrides standard serialization method.
+        /// Converts event's information into XElemet type adding Button name, DateTime of the button press and four hands associated with it
+        /// </summary>
+        /// <returns>Xelement containing Button name, DateTime of the button press and four hands associated with it</returns>
         public override XElement Serialize()
         {
             XElement output = base.Serialize();

@@ -19,6 +19,9 @@ using Microsoft.ApplicationInsights.Extensibility.Implementation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
+//If anuthorized exception occures - go to file explorer @Cards\Cards\bin\x86\Debug\AppX (@ is local folder of the project).
+//Right click go to Properties -> Security and grant full accesss to accounts represesnting the application
+
 namespace Cards
 {
     /// <summary>
@@ -208,24 +211,6 @@ namespace Cards
             
 
         }
-
-
-        //public void Documentation()
-        //{
-        //    //write a new line to the file to record each time the OK button is clicked
-        //    //each line should contain the time of the event
-
-        //    string testString = "face";
-        //    string fileLocation = @"C:\myfile.txt";
-        //    using (FileStream stream = new FileStream(fileLocation, FileMode.OpenOrCreate))
-        //    using (StreamWriter writer = new StreamWriter(stream))
-        //    {
-        //        writer.WriteLine(testString);
-        //    }
-
-
-        //}
-
 
     }
 }

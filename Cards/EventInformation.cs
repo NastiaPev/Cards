@@ -27,6 +27,10 @@ namespace Cards
             SenderName = sender;
         }
 
+        /// <summary>
+        /// Converts event's information into XElemet type adding Button name and DateTime
+        /// </summary>
+        /// <returns>element containing Button name and DateTime</returns>
         public virtual XElement Serialize()
         {
 
