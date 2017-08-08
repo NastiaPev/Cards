@@ -1,4 +1,4 @@
-                                                                                                                     using System;
+using System;
 
 namespace Cards
 {
@@ -19,6 +19,10 @@ namespace Cards
 		    this.playingCardCount++;
 		}
 
+		// CODEREVIEW: I'd call this method something other than serialize. Perhaps override ToString(). Serialise tends to refer
+		// CODEREVIEW:  to translating data between formats. This method, though, outputs a human-readable display text.
+		
+		// CODEREVIEW: A proper serialisation could be useful though...
 		public string Serialize()
 		{
 			string result = "";

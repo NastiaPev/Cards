@@ -9,9 +9,11 @@ namespace Cards
 {
     /// <summary>
     ///  Represents Deal button click. Records each hand.
+	/// CODEREVIEW: CardDealEvent?
     /// </summary>
     class EventWithDeal : EventInformation
     {
+		// CODEREVIEW: These two properties are defined on the base class so do not need to be defined here too.
         public DateTime CurrentDateTime { get; }
         public string SenderName { get; }
 
@@ -32,8 +34,10 @@ namespace Cards
         /// <param name="handWest" >Hand labelled West</param>
         public EventWithDeal(string sender, DateTime time, Hand handNorth, Hand handSouth, Hand handEast, Hand handWest) : base(sender, time)
         {
+			// CODEREVIEW: These two properties are set in the base constructor so do not need to be set here too.
             CurrentDateTime = time;
             SenderName = sender;
+			
             HandNorth = handNorth;
             HandSouth = handSouth;
             HandEast = handEast;
@@ -48,6 +52,34 @@ namespace Cards
         public override XElement Serialize()
         {
             XElement output = base.Serialize();
+			// CODEREVIEW: By writing out the human-readable descriptions of the hands, it becomes harder for someone to programatically
+			// CODEREVEIW: parse the hand from the serialisation. Instead, it could be beneficial for the Serialise() method on a Hand object
+			// CODEREVIEW: to build up an XElement which contains child elements for each card, in order. E.g.:
+			/*
+			 * <hand>
+			 *	<card suit="hearts" value="10"/>
+			 *	<card suit="spades" value="queen"/>
+			 *	...
+			 *</hand>
+			 * 
+			 */
+			 // CODEREVIEW: These could then be used in this serialisation, perhaps like:
+	        /*
+			* <north>
+			*	<hand>
+			*		<card suit="hearts" value="10"/>
+			*		<card suit="spades" value="queen"/>
+			*		...
+			*	</hand>
+			* </north>
+			* <south>
+			*	...
+			* </south>
+			*
+			* etc.
+			* 
+			*/
+
             XElement handNorth = new XElement("hand-North", HandNorth.Serialize());
             XElement handSouth = new XElement("hand-South", HandSouth.Serialize());
             XElement handEast = new XElement("hand-East", HandEast.Serialize());

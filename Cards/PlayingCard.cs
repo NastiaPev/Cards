@@ -17,6 +17,8 @@ namespace Cards
             return result;
 		}
 
+		// CODEREVIEW: might be worth putting an XElement serialisation on this object
+
         public Suit CardSuit()
         {
             return this.suit;

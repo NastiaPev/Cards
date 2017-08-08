@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Cards
 {
-    class EventFileTableWriter
+	// CODEREVEIW: File not needed
+	class EventFileTableWriter
     {
         //TODO
     }
