@@ -1,46 +1,47 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace Cards
 {
 	class Hand
 	{
-        private static int handSize;
-        private PlayingCard[] cards = new PlayingCard[handSize];
-        private int playingCardCount = 0;
+	    public static int HandSize { get; set; }
+	    private List<PlayingCard> cards = new List<PlayingCard>();
+	    public Player PlayerName { get; set; } = Player.None;
 
-		public void AddCardToHand(PlayingCard cardDealt)
+        /// <summary>
+        /// Adds a playing card to hand
+        /// </summary>
+        /// <param name="cardDealt">The card being added
+        /// </param>
+	    public void AddCardToHand(PlayingCard cardDealt)
 		{
-		    if (this.playingCardCount >= handSize)
+		    if (cards.Count >= HandSize)
 		    {
-                throw new ArgumentException("Too many cards");
+                throw new ArgumentException("Too many cards"); /// refresh the hand
 		    }
 
-		    this.cards[this.playingCardCount] = cardDealt;
-		    this.playingCardCount++;
+		    cards.Add(cardDealt); 
 		}
 
-		// CODEREVIEW: I'd call this method something other than serialize. Perhaps override ToString(). Serialise tends to refer
-		// CODEREVIEW:  to translating data between formats. This method, though, outputs a human-readable display text.
-		
-		// CODEREVIEW: A proper serialisation could be useful though...
-		public string Serialize()
+		public override string ToString()
 		{
-			string result = "";
-			foreach (PlayingCard card in this.cards)
-			{
-                result += $"{card.ToString()}\n";
-            }
-
-			return result;
+		    return cards.Aggregate("", (current, card) => current + $"{card}\n");
 		}
 
-	    public static void SetHandSize(int i)
-	    {
-	        handSize = i;
-
-	    }
-
-	    public static int GetHandSize() => handSize;
-
+        /// <summary>
+        /// Returns an XML representation of the hand, containing 'player' and 'card' elemnts.
+        /// Card, in turn, contains 'suit' and 'value' elements
+        /// </summary>
+        /// <returns>XML representation of the hand</returns>
+	    public XElement Serialize()
+        {
+            return new XElement("hand",
+                new XAttribute("player", PlayerName),
+                cards.Select(card =>
+                    new XElement("card", card.Serialize())));
+        }
 	}
 }

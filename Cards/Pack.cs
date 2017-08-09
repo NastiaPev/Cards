@@ -91,14 +91,12 @@ namespace Cards
                     break;
                 }
             }
-
             return flag;
         }
 
         private bool IsCardAlreadyDealt(Suit suit, Value value)
         {
             bool flag = this.cardPack[(int) suit, (int) value] == null;
-
             return flag;
         }
     }

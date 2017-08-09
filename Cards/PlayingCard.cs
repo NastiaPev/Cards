@@ -1,3 +1,5 @@
+using System.Xml.Linq;
+
 namespace Cards
 {
 	class PlayingCard
@@ -17,16 +19,16 @@ namespace Cards
             return result;
 		}
 
-		// CODEREVIEW: might be worth putting an XElement serialisation on this object
 
-        public Suit CardSuit()
-        {
-            return this.suit;
-        }
-
-        public Value CardValue()
-        {
-            return this.value;
-        }
-	}
+	    /// <summary>
+	    /// Returns an XML representation of the card, containing 'suit' and 'value' elements
+	    /// </summary>
+	    /// <returns>XML representation of the card</returns>
+	    public XElement Serialize()
+	    {
+	        return new XElement("card",
+	            new XElement("suit", suit),
+	            new XElement("value", value));
+	    }
+    }
 }
