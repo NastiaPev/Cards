@@ -27,7 +27,8 @@ namespace Cards
 	    public XElement Serialize()
 	    {
 	        return new XElement("card",
-	            new XElement("suit", suit),
+		        // CODEREVIEW: See the comment on "Hand.cs" for why this is dangerous.
+				new XElement("suit", suit),
 	            new XElement("value", value));
 	    }
     }

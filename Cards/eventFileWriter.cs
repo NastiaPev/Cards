@@ -27,12 +27,12 @@ namespace Cards
         
         public void WriteIntoFile(UserInteraction userUserInteraction)
         {
-                
-                using (FileStream stream = new FileStream(_mFileLocation, FileMode.Append))
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    writer.WriteLine(userUserInteraction.Serialize());
-                }
+			// CODEREVIEW: This is throwing an unauthorizedaccessexception for me. Is is something to do with whether the file already exists?
+			using(FileStream stream = new FileStream(_mFileLocation, FileMode.Append))
+            using (StreamWriter writer = new StreamWriter(stream))
+            {
+                writer.WriteLine(userUserInteraction.Serialize());
+            }
            
         }
       

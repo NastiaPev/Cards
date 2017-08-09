@@ -7,6 +7,7 @@ namespace Cards
 {	
 	class Pack
 	{
+		// CODEREVIEW: These could be marked as "const"
         private int numSuits = 4;
         private int cardsPerSuit = 13;
         private PlayingCard[,] cardPack;
@@ -64,8 +65,8 @@ namespace Cards
                 suit = (Suit)randomCardSelector.Next(0, this.numSuits);
             }
 
-           
-            Value value = (Value) randomCardSelector.Next(13 - cardsPerSuit, 13); //13 represents max number of cards in  a deck
+			// CODEREVIEW: instances of '13' like this should be avoided. Use "cardsPerSuit" variable instead.
+			Value value = (Value) randomCardSelector.Next(13 - cardsPerSuit, 13); //13 represents max number of cards in  a deck
 
             while (this.IsCardAlreadyDealt(suit, value))
             {
