@@ -7,7 +7,9 @@ namespace Cards
 {	
 	class Pack
 	{
-		// CODEREVIEW: These could be marked as "const"
+	    private const int maxCardsInSuit = 13;
+	    private const int maxSuits = 4;
+
         private int numSuits = 4;
         private int cardsPerSuit = 13;
         private PlayingCard[,] cardPack;
@@ -20,7 +22,7 @@ namespace Cards
 
             for (Suit i = Suit.Clubs; (int) i < numSuits; i++)
             {
-                for (Value j = Value.Ace; (int) j >= 13-cardsPerSuit; j--)
+                for (Value j = Value.Ace; (int) j >= maxCardsInSuit-cardsPerSuit; j--)
                 {
                     this.cardPack[(int)i,(int)j] = new PlayingCard(i,j); 
                 }
@@ -35,7 +37,7 @@ namespace Cards
 
 	    public void SetNumSuits(int num)
 	    {
-            if (num > 0 && num < 5)
+            if (num > 0 && num <= maxSuits)
             {
                 numSuits = num;
             }
@@ -44,7 +46,7 @@ namespace Cards
 
 	    public void SetNumCards(int num)
 	    {
-	        if (num > 0 && num < 14)
+	        if (num > 0 && num <= maxCardsInSuit)
 	        {
 	            cardsPerSuit = num;
 	        }
@@ -65,12 +67,11 @@ namespace Cards
                 suit = (Suit)randomCardSelector.Next(0, this.numSuits);
             }
 
-			// CODEREVIEW: instances of '13' like this should be avoided. Use "cardsPerSuit" variable instead.
-			Value value = (Value) randomCardSelector.Next(13 - cardsPerSuit, 13); //13 represents max number of cards in  a deck
+			Value value = (Value) randomCardSelector.Next(maxCardsInSuit - cardsPerSuit, maxCardsInSuit); 
 
             while (this.IsCardAlreadyDealt(suit, value))
             {
-                value = (Value)randomCardSelector.Next(13 - cardsPerSuit, 13);
+                value = (Value)randomCardSelector.Next(maxCardsInSuit - cardsPerSuit, maxCardsInSuit);
             }
 
             PlayingCard card = this.cardPack[(int) suit, (int) value];
@@ -84,7 +85,7 @@ namespace Cards
         {
             bool flag = true;
 
-            for (Value j = Value.Ace; (int) j >= 13 - cardsPerSuit; j--)
+            for (Value j = Value.Ace; (int) j >= maxCardsInSuit - cardsPerSuit; j--)
             {
                 if (!IsCardAlreadyDealt(suit, j))
                 {

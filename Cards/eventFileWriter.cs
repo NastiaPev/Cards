@@ -28,6 +28,7 @@ namespace Cards
         public void WriteIntoFile(UserInteraction userUserInteraction)
         {
 			// CODEREVIEW: This is throwing an unauthorizedaccessexception for me. Is is something to do with whether the file already exists?
+            //Response - nope just windows - can show you how to fix it
 			using(FileStream stream = new FileStream(_mFileLocation, FileMode.Append))
             using (StreamWriter writer = new StreamWriter(stream))
             {

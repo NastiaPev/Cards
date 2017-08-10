@@ -30,15 +30,18 @@ namespace Cards
     public sealed partial class MainPage : Page
     {
         public const int NumHands = 4;
+        private const int maxCardsInSuit = 13;
+        private const int maxSuits = 4;
+
         private Pack pack = null;
         private List<Hand> hands = new List<Hand>();
+        private int handSize = 13;
 
 
         public MainPage()
         {
             this.InitializeComponent();
             pack = new Pack();
-            Hand.HandSize = 13;
         }
 
         /// <summary>
@@ -48,34 +51,28 @@ namespace Cards
         /// <param name="e"></param>
         private void DealClick(object sender, RoutedEventArgs e)
         {
+         
+
             try
             {
-                hands = new List<Hand>();
+                hands = new List<Hand>(); //discarding old hands which are left from previous deal
                 this.Tag = "Deal";
-                for (int i = 0; i < NumHands; i++)
+
+                Player[] allPlayers = {Player.North, Player.South, Player.East, Player.West};
+                foreach (Player player in allPlayers)
                 {
-                    hands.Add(new Hand());
-                    for (int j = 0; j < Hand.HandSize; j++)
-                    {
-                        PlayingCard card = pack.DealCardFromPack();
-                        hands[i].AddCardToHand(card);
-                    }
+                    PlayerHand hand = new PlayerHand(player, handSize);
+                    hand.DealFromPack(pack);
+                    hands.Add(hand);
                 }
 
                 north.Text = hands[0].ToString();
-                hands[0].PlayerName = Player.North;
-
                 south.Text = hands[1].ToString();
-                hands[1].PlayerName = Player.South;
-
                 east.Text = hands[2].ToString();
-                hands[2].PlayerName = Player.East;
-
                 west.Text = hands[3].ToString();
-                hands[3].PlayerName = Player.West;
 
                 pack = new Pack(pack.GetNumSuits(), pack.GetNumCards());
-                CardDealUserInteraction cardDealUserInteraction = new CardDealUserInteraction(((Button) sender).Tag.ToString(), DateTime.Now, hands);
+                CardDealUserInteraction cardDealUserInteraction = new CardDealUserInteraction(((Button) sender).Tag.ToString(), DateTime.Now, hands); //Ask Andy - I hope I used inheritance right
                 EventFileWriter.TheWriter.WriteIntoFile(cardDealUserInteraction);
 
             }
@@ -98,19 +95,19 @@ namespace Cards
                 this.Tag = "Suit";
                 int i = Int32.Parse(Suits.Text);
 
-                if (i > 0 && i < 5)
+                if (i > 0 && i <= maxSuits)
                 {
                     pack.SetNumSuits(i);
                     SuitMistake.Text = "";
-                    AdjustHandSize(i * pack.GetNumCards() / 4);
+                    AdjustHandSize(i * pack.GetNumCards() / NumHands);
                 }
                 else
                 {
-                    Suits.Text = "4";
+                    Suits.Text = $"{maxSuits}";
                     SuitMistake.Text = "Please enter a valid number";
-                    pack.SetNumSuits(4);
-                    i = 4;
-                    AdjustHandSize(4 * pack.GetNumCards() / 4);
+                    pack.SetNumSuits(maxSuits);
+                    i = maxSuits;
+                    AdjustHandSize(maxSuits * pack.GetNumCards() / NumHands);
                 }
 
                 NumericalUserInteraction numericalUserInteraction = new NumericalUserInteraction(((Button)sender).Tag.ToString(), DateTime.Now, i);
@@ -118,10 +115,10 @@ namespace Cards
             }
             catch (FormatException fEx)
             {
-                Suits.Text = "4";
+                Suits.Text = $"{maxSuits}";
                 SuitMistake.Text = "Please enter a valid number";
-                pack.SetNumSuits(4);
-                AdjustHandSize(4 * pack.GetNumCards() / 4);
+                pack.SetNumSuits(maxSuits);
+                AdjustHandSize(maxSuits * pack.GetNumCards() / NumHands);
             }
         }
 
@@ -138,18 +135,18 @@ namespace Cards
                 this.Tag = "CardsInSuit";
                 int i = Int32.Parse(Cards.Text);
 
-                if (i > 0 && i < 14)
+                if (i > 0 && i <= maxCardsInSuit)
                 {
                     pack.SetNumCards(i);
-                    AdjustHandSize(i * pack.GetNumSuits() / 4);
+                    AdjustHandSize(i * pack.GetNumSuits() / NumHands);
                 }
                 else
                 {
-                    Cards.Text = "13";
+                    Cards.Text = $"{maxCardsInSuit}";
                     CardMistake.Text = "Please enter a valid number";
-                    i = 13;
-                    pack.SetNumCards(13);
-                    AdjustHandSize(13 * pack.GetNumSuits() / 4);
+                    i = maxCardsInSuit;
+                    pack.SetNumCards(maxCardsInSuit);
+                    AdjustHandSize(maxCardsInSuit * pack.GetNumSuits() / NumHands);
                 }
 
                 NumericalUserInteraction numericalUserInteraction = new NumericalUserInteraction(((Button)sender).Tag.ToString(), DateTime.Now, i);
@@ -158,42 +155,41 @@ namespace Cards
             }
             catch (FormatException fEx)
             {
-                Cards.Text = "13";
+                Cards.Text = $"{maxCardsInSuit}";
                 CardMistake.Text = "Please enter a valid number";
-                pack.SetNumCards(13);
-                AdjustHandSize(13 * pack.GetNumSuits() / 4);
+                pack.SetNumCards(maxCardsInSuit);
+                AdjustHandSize(maxCardsInSuit * pack.GetNumSuits() / NumHands);
 
             }
             
 
         }
         /// <summary>
-        /// Cheks whether it is possible to adjust the hand size to the imputed number. If it is, adjusts
-        /// the size of the hadn. Otherwise adjusts the size of the hand to maximum possible given the size of the deck 
+        /// Cheks whether it is possible to adjust the hand sizeUserInput to the imputed number. If it is, adjusts
+        /// the sizeUserInput of the hadn. Otherwise adjusts the sizeUserInput of the hand to maximum possible given the sizeUserInput of the deck 
         /// and paassively-aggressively swears to the user. 
         /// </summary>
-        /// <param name="size">the size hand is being adjusted to</param>
-        /// <returns>new hand size</returns>
-        private int AdjustHandSize(int size)
+        /// <param name="sizeUserInput">the sizeUserInput hand is being adjusted to</param>
+        /// <returns>new hand sizeUserInput</returns>
+        private int AdjustHandSize(int sizeUserInput)
         {
 
-            if (size >= 0 && size <= pack.GetNumSuits() * pack.GetNumCards() / 4)
+            if (sizeUserInput >= 0 && sizeUserInput <= pack.GetNumSuits() * pack.GetNumCards() / NumHands)
             {
-                HandSize.Text = size.ToString();
-                Hand.HandSize = size;
+                HandSize.Text = sizeUserInput.ToString();
+                handSize = sizeUserInput;
                 HandSizeMistake.Text = "";
-                return size;
+                return handSize;
             }
 
-            size = pack.GetNumSuits() * pack.GetNumCards() / 4;
-            HandSize.Text = $"{size}";
-            Hand.HandSize = size;
-            HandSizeMistake.Text = "Please adjust hand size correctly";
-            return size;
+            handSize = pack.GetNumSuits() * pack.GetNumCards() / NumHands;
+            HandSize.Text = $"{handSize}";
+            HandSizeMistake.Text = "Please adjust hand sizeUserInput correctly";
+            return handSize;
         }
 
         /// <summary>
-        /// An event happening when the button adjusting the hand size is clicked
+        /// An event happening when the button adjusting the hand sizeUserInput is clicked
         /// </summary>
         /// <param name="sender">Button causing the event</param>
         /// <param name="e"></param>
@@ -210,7 +206,7 @@ namespace Cards
             }
             catch (FormatException fEx)
             {
-                AdjustHandSize(pack.GetNumSuits() * pack.GetNumCards() / 4);
+                AdjustHandSize(pack.GetNumSuits() * pack.GetNumCards() / NumHands);
                 HandSizeMistake.Text = "Please enter something making sense";
             }
             
